@@ -7,9 +7,9 @@
 # * Usunięcie z sygnału wskazanego komponentu
 # * Zapisanie wynikowych komponentów do pliku .csv
 # 9. ICA na bogato (praca dla dwóch osób)
-# * Program w wersji 8 rozbudowany o wskazywanie fragmentów, z których chcemy usuwać 
+# * Program w wersji 8 rozbudowany o wskazywanie fragmentów, z których chcemy usuwać
 # komponent
-# Wartości dla kolejnych kanałów sygnału w plikach .csv rozdzielane są średnikiem. Kolejne próbki są 
+# Wartości dla kolejnych kanałów sygnału w plikach .csv rozdzielane są średnikiem. Kolejne próbki są
 # w nowych liniach. Dla jednokanałowego sygnału wszystkie wartości znajdują się w jednej kolumnie.
 
 import pandas as pd
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 #wszystko trzeba przerzucic do jupiter noteboook zeby plots dzialaly jak nalezy i zeby dalo sie kolaborowac
 
-#pojawia sie ekranik na ktorym trzeba podac sciezke do pliku sygnalu 
+#pojawia sie ekranik na ktorym trzeba podac sciezke do pliku sygnalu
 
 path = "Dane/emg_2_56_57.csv"
 file_name = ""
@@ -29,14 +29,14 @@ file_name = ""
 data = pd.read_csv(path, skiprows=0, delimiter=";")
 n_channels = data.shape[1]
 
-#wskazanie ilosci probek 
+#wskazanie ilosci probek
 n_samples = data.shape[0]
 
 channel_names = []
 for i in range(n_channels):
     channel_names.append(f"CH{i}")
 
-info = mne.create_info(ch_names=channel_names, sfreq=1) #nadaje probkowanie 1:1 przez co nie ma znaczenia jakie probkowanie
+info = mne.create_info(ch_names=channel_names, sfreq=1, ch_types='eeg') #nadaje probkowanie 1:1 przez co nie ma znaczenia jakie probkowanie
                                                        #ma sygnal i kod staje sie uniwersalny (os czasu jest w czestotli-
                                                        #wosci probek)
 
@@ -62,18 +62,18 @@ for i, source in enumerate(sources):
 plt.tight_layout()
 plt.show()
 exit()
-#sources to tablica w ktorej znajduja sie znalezione komponenty. na ekraniku wyswietlaja sie komponenty jakie odnalazlo 
-#do przejrzenia, pod nim wyswietlaja sie dwa przyciski "apply to whole signal", "choose signal fragment", 
+#sources to tablica w ktorej znajduja sie znalezione komponenty. na ekraniku wyswietlaja sie komponenty jakie odnalazlo
+#do przejrzenia, pod nim wyswietlaja sie dwa przyciski "apply to whole signal", "choose signal fragment",
 #po nacisnieciu "choose signal fragment" pojawia sie ekranik na ktorym mozna zaznaczyc fragment oscylogramu, po zaznaczeniu i
-#nacisnieciu "save" wycina ten fragment sygnalu i przechodzi na kolejny ekranik gdzie widac wyciety sygnal i znow komponenty 
-#(wygladajacy jak ten wczesniejszy) + miejsce na wpisanie numerow komponentow ktore chcemy usunac (one zapisuja sie w postaci 
+#nacisnieciu "save" wycina ten fragment sygnalu i przechodzi na kolejny ekranik gdzie widac wyciety sygnal i znow komponenty
+#(wygladajacy jak ten wczesniejszy) + miejsce na wpisanie numerow komponentow ktore chcemy usunac (one zapisuja sie w postaci
 #tablicy "komponenty wybrane"):
 
 komponenty_wybrane = 0 #to dostajemy z indexu pierwszego wymiaru sources
 ica.exclude = [komponenty_wybrane]
-cleaned_fragment = ica.apply(raw.copy()) 
+cleaned_fragment = ica.apply(raw.copy())
 
 #zapisanie do pliku (podanie sciezki do pliku wyswietla  sie w kolejnym lub tym samym okienku)
 output_file = ""
-df = pd.DataFrame(cleaned_fragment.get_data().transpose()) #chyba? odwracam transpozycje w ten sposob??? 
+df = pd.DataFrame(cleaned_fragment.get_data().transpose()) #chyba? odwracam transpozycje w ten sposob???
 df.to_csv(output_file, sep=';')
