@@ -127,11 +127,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.raw = mne.io.RawArray(data.transpose(), self.info)
 
             self.raw_plot = self.raw.plot(title=f"Sygnał", block=False, show=False, duration=self.n_samples / self.info['sfreq'], scalings='auto')
+            self.raw_plot.fake_keypress('a')
+            self.raw_plot.mne.fig_annotation._add_description("Wybrane")
 
             for i in reversed(range(self.layoutPlot.count())):
                 self.layoutPlot.itemAt(i).widget().setParent(None)
 
-            self.layoutPlot.addWidget(self.raw_plot.canvas)
+            self.layoutPlot.addWidget(self.raw_plot)
 
             self.bOpen.setEnabled(False)
             self.bICA.setEnabled(True)
@@ -158,6 +160,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
 def main():
+    mne.viz.set_browser_backend("pyqtgraph")
+
     app = QApplication([])
     window = MainWindow()
     window.show()
