@@ -25,9 +25,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bHelp">
+       <widget class="QPushButton" name="bExport">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>Pomoc</string>
+         <string>Eksportuj dane</string>
         </property>
        </widget>
       </item>

@@ -1,3 +1,17 @@
+# 8. ICA
+# * Wczytanie pliku sygnału
+# * Wskazanie parametrów sygnału (liczba próbek, próbkowanie)
+# * Wyświetlenie sygnału w postaci oscylogramu
+# * Wykonanie analizy niezależnych składowych
+# * Wyświetlenie odnalezionych komponentów w postaci oscylogramu
+# * Usunięcie z sygnału wskazanego komponentu
+# * Zapisanie wynikowych komponentów do pliku .csv
+# 9. ICA na bogato (praca dla dwóch osób)
+# * Program w wersji 8 rozbudowany o wskazywanie fragmentów, z których chcemy usuwać
+# komponent
+# Wartości dla kolejnych kanałów sygnału w plikach .csv rozdzielane są średnikiem. Kolejne próbki są
+# w nowych liniach. Dla jednokanałowego sygnału wszystkie wartości znajdują się w jednej kolumnie.
+
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import *
 import pandas as pd
@@ -102,11 +116,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.bOpen.clicked.connect(self.openDialog)
+        self.bExport.clicked.connect(self.export)
         self.bICA.clicked.connect(self.performICA)
         self.bApply.clicked.connect(self.applyICA)
 
         self.bICA.setEnabled(False)
         self.bApply.setEnabled(False)
+
+    def replacePlot(self, fig):
+        for i in reversed(range(self.layoutPlot.count())):
+            self.layoutPlot.itemAt(i).widget().setParent(None)
+
+        self.layoutPlot.addWidget(fig)
+
+    def export(self):
+        fileName = QFileDialog.getSaveFileName(self, "Zapisz sygnał", ".", "Pliki .csv (*.csv)")
+        if not fileName[0]:
+            return
+        
+        df = pd.DataFrame(self.new_raw.get_data().transpose())
+        df.to_csv(fileName[0], sep=';', header=False, index=False)
 
     def openDialog(self):
         dialog = OpenDialog()
@@ -130,10 +159,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.raw_plot.fake_keypress('a')
             self.raw_plot.mne.fig_annotation._add_description("Wybrane")
 
-            for i in reversed(range(self.layoutPlot.count())):
-                self.layoutPlot.itemAt(i).widget().setParent(None)
-
-            self.layoutPlot.addWidget(self.raw_plot)
+            self.replacePlot(self.raw_plot)
 
             self.bOpen.setEnabled(False)
             self.bICA.setEnabled(True)
@@ -157,7 +183,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.bApply.setEnabled(True)
 
     def applyICA(self):
-        pass
+        self.bApply.setEnabled(False)
+
+        if self.raw.annotations:
+            # Select only annotated segments
+            data_segments = []
+
+            for annot in self.raw.annotations:
+                start = annot['onset']
+                stop = start + annot['duration']
+                
+                start_sample, stop_sample = self.raw.time_as_index([start, stop])
+                
+                data, _ = self.raw[:, start_sample:stop_sample]
+                
+                data_segments.append(data)
+
+            concatenated_data = np.concatenate(data_segments, axis=1)
+
+            self.new_raw = mne.io.RawArray(concatenated_data, self.raw.info)
+            self.new_raw = self.ica.apply(self.new_raw)
+        else:
+            # Apply to the whole data
+            self.new_raw = self.ica.apply(self.raw.copy())
+
+        self.new_raw_plot = self.new_raw.plot(title=f"Sygnał po ICA", block=False, show=False, duration=self.new_raw.get_data().shape[1] / self.info['sfreq'], scalings='auto')
+        self.replacePlot(self.new_raw_plot)
+
+        self.bExport.setEnabled(True)
 
 def main():
     mne.viz.set_browser_backend("pyqtgraph")
