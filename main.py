@@ -175,13 +175,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.bICA.setEnabled(True)
 
     def performICA(self):
+        # TODO: Add dialog for selecting number of components manually?
         self.n_components = 0
         if self.n_channels < 8:
             self.n_components = self.n_channels
         else:
             self.n_components = self.n_channels * 0.40
 
-        self.ica = mne.preprocessing.ICA(n_components=self.n_components, random_state=97, max_iter=800)
+        self.ica = mne.preprocessing.ICA(n_components=self.n_components, max_iter="auto")
         self.ica.fit(self.raw)
 
         sources = self.ica.get_sources(self.raw).get_data()
