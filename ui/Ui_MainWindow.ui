@@ -48,7 +48,30 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="bHelp">
+        <property name="text">
+         <string>Instrukcja</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QPushButton" name="bICA">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Przeprowadź ICA</string>
         </property>
@@ -56,6 +79,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="bApply">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Zaaplikuj ICA</string>
         </property>

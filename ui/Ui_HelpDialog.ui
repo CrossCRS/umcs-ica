@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HelpDialog</class>
+ <widget class="QDialog" name="HelpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>650</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ICA - Instrukcja</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lblHelp">
+     <property name="text">
+      <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+&lt;p&gt;Kliknij przycisk &lt;span style=&quot;font-weight:600;&quot;&gt;Importuj dane&lt;/span&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Wczytaj plik CSV (każdy kanał w oddzielnej kolumnie).&lt;/li&gt;
+  &lt;li&gt;Opcjonalnie ustaw opcje pomijania wierszy, wyboru kolumn lub separatora.&lt;/li&gt;
+  &lt;li&gt;Dane zostaną wyświetlone w głównym oknie.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kliknij przycisk &lt;span style=&quot;font-weight:600;&quot;&gt;Przeprowadź ICA&lt;/span&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Wyświetlone zostaną odnalezione komponenty.&lt;/li&gt;
+  &lt;li&gt;Zaznacz checkboxy przy komponentach, które chcesz usunąć.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kliknij przycisk &lt;span style=&quot;font-weight:600;&quot;&gt;Zaaplikuj ICA&lt;/span&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Możesz zaaplikować ICA dla wybranych fragmentów (zaznacz je przeciągając myszką po oscylogramie, zaznaczanie można usuwać naciskająć na nie prawym przyciskiem myszy) lub całego sygnału (nie zaznaczając niczego).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kliknij przycisk &lt;span style=&quot;font-weight:600;&quot;&gt;Eksportuj dane&lt;/span&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Zapisz odseparowane sygnały do pliku CSV.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblAuthors">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Norbert Budzyński, Aleksandra Nawrocka</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Close</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>HelpDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>HelpDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

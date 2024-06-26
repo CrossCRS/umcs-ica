@@ -23,6 +23,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from ui.Ui_MainWindow import Ui_MainWindow
 from ui.Ui_OpenDialog import Ui_OpenDialog
 from ui.Ui_ComponentDialog import Ui_ComponentDialog
+from ui.Ui_HelpDialog import Ui_HelpDialog
 
 class OpenDialog(QDialog, Ui_OpenDialog):
     def __init__(self):
@@ -110,6 +111,11 @@ class ComponentDialog(QDialog, Ui_ComponentDialog):
     def accept(self):
         super().accept()
 
+class HelpDialog(QDialog, Ui_HelpDialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -119,6 +125,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.bExport.clicked.connect(self.export)
         self.bICA.clicked.connect(self.performICA)
         self.bApply.clicked.connect(self.applyICA)
+        self.bHelp.clicked.connect(self.showHelp)
 
         self.bICA.setEnabled(False)
         self.bApply.setEnabled(False)
@@ -128,6 +135,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.layoutPlot.itemAt(i).widget().setParent(None)
 
         self.layoutPlot.addWidget(fig)
+
+    def showHelp(self):
+        HelpDialog().exec()
 
     def export(self):
         fileName = QFileDialog.getSaveFileName(self, "Zapisz sygnał", ".", "Pliki .csv (*.csv)")
